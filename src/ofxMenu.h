@@ -40,7 +40,7 @@ public:
     void clone(const ofxMenu& other);
     
     void addButton(string name);
-    void addMenu(ofxMenu menu);
+    ofxMenu* addMenu(string name);
     void update();
     void draw();
     void openByClick(int x, int y);
@@ -65,7 +65,7 @@ private:
     const int HEIGHT = 20;
     const int TEXT_PAD_WIDTH = 10;
     const int TEXT_PAD_HEIGHT = 14;
-    
+
     ofTrueTypeFont font;
     string highlightedName;
     ofPoint pos;
