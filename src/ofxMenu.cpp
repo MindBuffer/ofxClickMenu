@@ -35,11 +35,27 @@ ofxMenu::ofxMenu(string name): MenuElement(MENU, name), bIsOpen(false) {
 
 //-----------------------------------------
 ofxMenu::ofxMenu(const ofxMenu& other): MenuElement(MENU, other.name),
-font(other.font),
-highlightedName(other.highlightedName),
-pos(other.pos),
-bIsOpen(false)
 {
+    this->cloneFrom(other);
+}
+
+//-----------------------------------------
+ofxMenu& ofxMenu::operator=(const ofxMenu& other)
+{
+    this->cloneFrom(other);
+    return *this;
+}
+
+//-----------------------------------------
+void ofxMenu::cloneFrom(const ofxMenu& other)
+{
+    // Copy stack based data by assignment.
+    this->font = other.font;
+    this->highlightedName = other.highlightedName;
+    this->pos = other.pos;
+    this->bIsOpen = other.bIsOpen;
+
+    // Deep copy heap allocated menu itmes.
     for(vector<MenuElement*>::const_iterator it = other.elements.begin(); it != other.elements.end(); it++){
         switch ((*it)->kind) {
             case MENU: {
@@ -57,11 +73,11 @@ bIsOpen(false)
             default:
                 break;
         }
-        
     }
+
+    // Register unique mouse and key events for this new menu.
     ofRegisterMouseEvents(this);
     ofRegisterKeyEvents(this);
-
 }
 
 //-----------------------------------------
