@@ -35,7 +35,9 @@ public:
     ~ofxMenu();
     ofxMenu(string name);
     ofxMenu(const ofxMenu& other);
+    ofxMenu& operator=(const ofxMenu& other);
     
+    void clone(const ofxMenu& other);
     
     void addButton(string name);
     void addMenu(ofxMenu menu);
