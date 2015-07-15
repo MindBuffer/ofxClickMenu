@@ -11,8 +11,7 @@
 //-----------------------------------------
 ofxMenu::~ofxMenu(){
     ofUnregisterMouseEvents(this);
-    ofUnregisterKeyEvents(this);
-
+    
     for(vector<MenuElement*>::iterator it = elements.begin(); it != elements.end(); it++){
         delete (*it);
         *it = NULL;
@@ -21,47 +20,62 @@ ofxMenu::~ofxMenu(){
 
 //-----------------------------------------
 ofxMenu::ofxMenu(string name): MenuElement(MENU, name), bIsOpen(false) {
-//    font.loadFont("BebasNeue.TTF", 10);
+    //    font.loadFont("BebasNeue.TTF", 10);
     font.loadFont("HelveticaNeue.ttf", 10);
     bIsOpen = false;
     highlightedName = "NONE";
     pos = ofPoint(0,0);
     
     ofRegisterMouseEvents(this);
-    ofRegisterKeyEvents(this);
-    
-    cout << "isOpen = " << bIsOpen << endl;
 }
 
 //-----------------------------------------
-ofxMenu::ofxMenu(const ofxMenu& other): MenuElement(MENU, other.name),
-font(other.font),
-highlightedName(other.highlightedName),
-pos(other.pos),
-bIsOpen(false)
+ofxMenu::ofxMenu(const ofxMenu& other): MenuElement(MENU, other.name)
 {
+    this->cloneFrom(other);
+}
+
+//-----------------------------------------
+ofxMenu& ofxMenu::operator=(const ofxMenu& other)
+{
+    this->cloneFrom(other);
+    return *this;
+}
+
+//-----------------------------------------
+void ofxMenu::cloneFrom(const ofxMenu& other)
+{
+    // Copy stack based data by assignment.
+    this->font = other.font;
+    this->highlightedName = other.highlightedName;
+    this->pos = other.pos;
+    this->bIsOpen = other.bIsOpen;
+    
+    // Reserve room in the vector.
+    this->elements.reserve(other.elements.size());
+    
+    // Deep copy heap allocated menu itmes.
     for(vector<MenuElement*>::const_iterator it = other.elements.begin(); it != other.elements.end(); it++){
         switch ((*it)->kind) {
             case MENU: {
                 // Cast MenuElement ptr to ofxMenu ptr.
                 ofxMenu* menuPtr = (ofxMenu*)(*it);
-                elements.push_back((MenuElement*)new ofxMenu(*menuPtr));
+                this->elements.push_back((MenuElement*)new ofxMenu(*menuPtr));
                 break;
             }
             case BUTTON: {
                 // Cast MenuElement ptr to Button ptr.
                 Button* buttonPtr = (Button*)(*it);
-                elements.push_back((MenuElement*)new Button(*buttonPtr));
+                this->elements.push_back((MenuElement*)new Button(*buttonPtr));
                 break;
             }
             default:
                 break;
         }
-        
     }
+    
+    // Register unique mouse and key events for this new menu.
     ofRegisterMouseEvents(this);
-    ofRegisterKeyEvents(this);
-
 }
 
 //-----------------------------------------
@@ -70,8 +84,10 @@ void ofxMenu::addButton(string name){
 }
 
 //-----------------------------------------
-void ofxMenu::addMenu(ofxMenu menu){
-    this->elements.push_back((MenuElement*) new ofxMenu(menu));
+ofxMenu* ofxMenu::addMenu(string name){
+    ofxMenu* newMenu = new ofxMenu(name);
+    this->elements.push_back((MenuElement*)newMenu);
+    return newMenu;
 }
 
 //-----------------------------------------
@@ -130,8 +146,6 @@ void ofxMenu::draw(){
                 default:
                     break;
             }
-            
-            
             yOffset += HEIGHT;
         }
         
@@ -141,7 +155,6 @@ void ofxMenu::draw(){
 
 //-----------------------------------------
 void ofxMenu::openByClick(int x, int y){
-    cout << "openByClick " << x << y << endl;
     bIsOpen = true;
     this->setPosition(x, y);
 }
@@ -169,7 +182,7 @@ void ofxMenu::setPosition(int x, int y) {
 //-----------------------------------------
 bool ofxMenu::isOverRect(int rectX, int rectY, int rectW, int rectH, int x, int y){
     return x < rectX + rectW && x > rectX
-        && y < rectY + rectH && y > rectY;
+    && y < rectY + rectH && y > rectY;
 }
 
 //-----------------------------------------
@@ -192,7 +205,7 @@ void ofxMenu::closeChildren() {
 
 //-----------------------------------------
 void ofxMenu::setHighlighted(int mouseX, int mouseY){
-
+    
     if(bIsOpen){
         
         int yOffset = 0;
@@ -225,7 +238,6 @@ void ofxMenu::setHighlighted(int mouseX, int mouseY){
             } else {
                 elem->isHighlighted = false;
             }
-            
             yOffset += HEIGHT;
         }
     }
@@ -235,7 +247,3 @@ void ofxMenu::setHighlighted(int mouseX, int mouseY){
 void ofxMenu::mouseMoved(ofMouseEventArgs &mouse){
     setHighlighted(mouse.x, mouse.y);
 }
-
-
-
-

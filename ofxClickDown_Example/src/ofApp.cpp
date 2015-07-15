@@ -7,48 +7,44 @@ void ofApp::setup(){
     ofSetFrameRate(60);
     ofSetCircleResolution(40);
     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-
-    // LFOS
-    ofxMenu lfos("LFOS");
-    lfos.addButton("LFO1");
-    lfos.addButton("LFO2");
-    lfos.addButton("LFO3");
-    lfos.addButton("LFO4");
-    lfos.addButton("LFO5");
-    lfos.addButton("REORDER1");
-    lfos.addButton("REORDER2");
-    lfos.addButton("REORDER3");
     
-    // Jen Instruments
-    ofxMenu instruments("Instruments");
-    instruments.addButton("Kick Amp");
-    instruments.addButton("Kick Pan");
-    instruments.addButton("Snare Amp");
-    instruments.addButton("Snare Pan");
-    instruments.addButton("Ride Amp");
-    instruments.addButton("Ride Pan");
-    instruments.addButton("Ghost Amp");
-    instruments.addButton("Ghost Pan");
+    // Add the JEN and LFOS menus to the modulatorMenu.
+    ofxMenu* jen = modulatorMenu.addMenu("JEN");
+    ofxMenu* lfos = modulatorMenu.addMenu("LFOS");
     
-    // Jen Playheads
-    ofxMenu playheads("Playheads");
-    playheads.addButton("Song");
-    playheads.addButton("Part");
-    playheads.addButton("Segment");
-    playheads.addButton("Bar");
-    playheads.addButton("Minim");
-    playheads.addButton("Beat");
-    playheads.addButton("Quaver");
-    playheads.addButton("SemiQuaver");
+    // Add the Instruments and Playheads menus to the `jen` menu.
+    ofxMenu* instruments = jen->addMenu("Instruments");
+    ofxMenu* playheads = jen->addMenu("Playheads");
     
-    // Jen Type
-    ofxMenu jen("JEN");
-    jen.addMenu(instruments);
-    jen.addMenu(playheads);
+    // Add the Instruments menu buttons.
+    instruments->addButton("Kick Amp");
+    instruments->addButton("Kick Pan");
+    instruments->addButton("Snare Amp");
+    instruments->addButton("Snare Pan");
+    instruments->addButton("Ride Amp");
+    instruments->addButton("Ride Pan");
+    instruments->addButton("Ghost Amp");
+    instruments->addButton("Ghost Pan");
     
-    modulatorMenu.addMenu(jen);
-    modulatorMenu.addMenu(lfos);
-
+    // Add the Playheads menu buttons.
+    playheads->addButton("Song");
+    playheads->addButton("Part");
+    playheads->addButton("Segment");
+    playheads->addButton("Bar");
+    playheads->addButton("Minim");
+    playheads->addButton("Beat");
+    playheads->addButton("Quaver");
+    playheads->addButton("SemiQuaver");
+    
+    // Add the LFOS menu buttons.
+    lfos->addButton("LFO1");
+    lfos->addButton("LFO2");
+    lfos->addButton("LFO3");
+    lfos->addButton("LFO4");
+    lfos->addButton("LFO5");
+    lfos->addButton("REORDER1");
+    lfos->addButton("REORDER2");
+    lfos->addButton("REORDER3");
 }
 
 //--------------------------------------------------------------
@@ -62,13 +58,13 @@ void ofApp::draw(){
     
     ofSetHexColor(0xFFFFFF);
     ofDrawBitmapString("Click & open Menu Dialog.", 30,30);
-
+    
     modulatorMenu.draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    
 }
 
 //--------------------------------------------------------------
@@ -107,6 +103,6 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo){
     
 }
