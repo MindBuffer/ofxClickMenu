@@ -55,19 +55,22 @@ void ofxMenu::cloneFrom(const ofxMenu& other)
     this->pos = other.pos;
     this->bIsOpen = other.bIsOpen;
 
+    // Reserve room in the vector.
+    this->elements.reserve(other.elements.size());
+
     // Deep copy heap allocated menu itmes.
     for(vector<MenuElement*>::const_iterator it = other.elements.begin(); it != other.elements.end(); it++){
         switch ((*it)->kind) {
             case MENU: {
                 // Cast MenuElement ptr to ofxMenu ptr.
                 ofxMenu* menuPtr = (ofxMenu*)(*it);
-                elements.push_back((MenuElement*)new ofxMenu(*menuPtr));
+                this->elements.push_back((MenuElement*)new ofxMenu(*menuPtr));
                 break;
             }
             case BUTTON: {
                 // Cast MenuElement ptr to Button ptr.
                 Button* buttonPtr = (Button*)(*it);
-                elements.push_back((MenuElement*)new Button(*buttonPtr));
+                this->elements.push_back((MenuElement*)new Button(*buttonPtr));
                 break;
             }
             default:
