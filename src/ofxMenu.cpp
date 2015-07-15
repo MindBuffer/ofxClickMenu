@@ -89,8 +89,10 @@ void ofxMenu::addButton(string name){
 }
 
 //-----------------------------------------
-void ofxMenu::addMenu(ofxMenu menu){
-    this->elements.push_back((MenuElement*) new ofxMenu(menu));
+ofxMenu* ofxMenu::addMenu(string name){
+    ofxMenu* newMenu = new ofxMenu(name);
+    this->elements.push_back((MenuElement*)newMenu);
+    return newMenu;
 }
 
 //-----------------------------------------
