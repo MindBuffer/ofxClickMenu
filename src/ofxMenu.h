@@ -44,12 +44,13 @@ public:
     void update();
     void draw();
     void openByClick(int x, int y);
+    void getSelected();
     
     //Mouse & Key Events
     void mousePressed(ofMouseEventArgs& mouse){}
     void mouseDragged(ofMouseEventArgs& mouse){}
     void mouseMoved(ofMouseEventArgs& mouse);
-    void mouseReleased(ofMouseEventArgs& mouse){}
+    void mouseReleased(ofMouseEventArgs& mouse);
     void mouseScrolled(ofMouseEventArgs& mouse){}
     
     // Unhighlight and close all children elements.
@@ -57,6 +58,10 @@ public:
     void setHighlighted(int mouseX, int mouseY);
     void setPosition(int x, int y);
     bool isOverRect(int rectX, int rectY, int rectW, int rectH, int x, int y);
+    
+    // Event for menu selection
+    ofEvent<string> selectedElement;
+    ofxMenu* topParent;
     
 private:
     const int WIDTH = 100;
@@ -66,6 +71,7 @@ private:
     
     ofTrueTypeFont font;
     string highlightedName;
+    string selectedName;
     ofPoint pos;
     bool bIsOpen;
     

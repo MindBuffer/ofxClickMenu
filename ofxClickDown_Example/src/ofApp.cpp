@@ -45,11 +45,22 @@ void ofApp::setup(){
     lfos->addButton("REORDER1");
     lfos->addButton("REORDER2");
     lfos->addButton("REORDER3");
+
+    ofAddListener(modulatorMenu.selectedElement, this, &ofApp::menuEvent);
+
+    cout << "modMenu.selectedElement address = " << &modulatorMenu.selectedElement << endl;
+
+}
+
+//--------------------------------------------------------------
+void ofApp::menuEvent(string &s){
+    cout << "Woooop our [ " + s + " ] button was clicked :) " << endl;
+    cout << " --------------------------------------------- " << endl;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+    modulatorMenu.update();
 }
 
 //--------------------------------------------------------------

@@ -25,6 +25,7 @@ ofxMenu::ofxMenu(string name): MenuElement(MENU, name), bIsOpen(false) {
     bIsOpen = false;
     highlightedName = "NONE";
     pos = ofPoint(0,0);
+    topParent = NULL;
     
     ofRegisterMouseEvents(this);
 }
@@ -86,13 +87,18 @@ void ofxMenu::addButton(string name){
 //-----------------------------------------
 ofxMenu* ofxMenu::addMenu(string name){
     ofxMenu* newMenu = new ofxMenu(name);
+    if (this->topParent) {
+        newMenu->topParent = this->topParent;
+    } else {
+        newMenu->topParent = this;
+    }
     this->elements.push_back((MenuElement*)newMenu);
     return newMenu;
 }
 
 //-----------------------------------------
 void ofxMenu::update(){
-    
+
 }
 
 //-----------------------------------------
@@ -155,8 +161,26 @@ void ofxMenu::draw(){
 
 //-----------------------------------------
 void ofxMenu::openByClick(int x, int y){
-    bIsOpen = true;
-    this->setPosition(x, y);
+    if(bIsOpen == false){
+        bIsOpen = true;
+        this->setPosition(x, y);
+    }
+}
+
+//-----------------------------------------
+void ofxMenu::getSelected(){
+    if(bIsOpen == true){
+        for(vector<MenuElement*>::iterator it = elements.begin(); it != elements.end(); it++){
+            MenuElement* elem = (*it);
+            
+            if(elem->kind == BUTTON && elem->isHighlighted ){
+                selectedName = elem->name;
+                ofNotifyEvent(topParent->selectedElement, elem->name, topParent);
+                
+                topParent->bIsOpen = false;
+            }
+        }
+    }
 }
 
 //-----------------------------------------
@@ -174,7 +198,6 @@ void ofxMenu::setPosition(int x, int y) {
             ofxMenu* menuPtr = (ofxMenu*)elem;
             menuPtr->setPosition(x + WIDTH, y + yOffset);
         }
-        
         yOffset += HEIGHT;
     }
 }
@@ -246,4 +269,9 @@ void ofxMenu::setHighlighted(int mouseX, int mouseY){
 //-----------------------------------------
 void ofxMenu::mouseMoved(ofMouseEventArgs &mouse){
     setHighlighted(mouse.x, mouse.y);
+}
+
+//-----------------------------------------
+void ofxMenu::mouseReleased(ofMouseEventArgs &mouse){
+    getSelected();
 }
