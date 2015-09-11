@@ -8,19 +8,33 @@
 
 #pragma once
 #include "ofMain.h"
+#include "ModulatorState.h"
 
 enum ElementKind {
     MENU,
     BUTTON,
 };
 
+class MenuEvent {
+public:
+    MenuEvent(vector<int> _indexTree): indexTree(_indexTree){}
+    vector<int> indexTree;
+};
 
 class MenuElement{
 public:
-    MenuElement(ElementKind _kind, string _name): kind(_kind), name(_name), isHighlighted(false){}
+    MenuElement(ElementKind _kind, string _name);
+    
+    void fillIndexTree(vector<int>* indexTree);
+    vector<int> getIndexTree();
+    
     ElementKind kind;
     string name;
     bool isHighlighted;
+    
+    // These will always be ofxMenus, but we can't do that because c++ is ok.
+    MenuElement* topParent;
+    MenuElement* parent;
 };
 
 
@@ -39,12 +53,28 @@ public:
     
     void cloneFrom(const ofxMenu& other);
     
+    void clearButtons();
     void addButton(string name);
     ofxMenu* addMenu(string name);
     void update();
     void draw();
+    void drawWithData(ModulatorState& modulatorState);
+    void drawWithDataRecursive(ModulatorState &modulatorState, vector<int>* indexTree);
+    void drawBox(MenuElement* elem, int elemX, int elemY);
+    void drawName(MenuElement* elem, int elemX, int elemY);
+    
     void openByClick(int x, int y);
     void getSelected();
+    
+    
+    int sizeOfMenuAtIndexTree(vector<int>& indexTree);
+    MenuElement* elemAtIndexTree(vector<int>& indexTree);
+    string* nameAtIndexTree(vector<int>& indexTree);
+    vector<vector<int> > indexTreeForEveryButtonInMenu(vector<int>& indexTree);
+    void fillWithIndexTreeForEveryButtonInMenu(vector<vector<int> >& indexTrees);
+    
+    MenuEvent genRandomIndexTree();
+    void genRandomIndexTreeRecursive(string& name, vector<int>& indexTree);
     
     //Mouse & Key Events
     void mousePressed(ofMouseEventArgs& mouse){}
@@ -58,10 +88,12 @@ public:
     void setHighlighted(int mouseX, int mouseY);
     void setPosition(int x, int y);
     bool isOverRect(int rectX, int rectY, int rectW, int rectH, int x, int y);
+    int getChildOffset();
     
     // Event for menu selection
-    ofEvent<string> selectedElement;
-    ofxMenu* topParent;
+    ofEvent<MenuEvent> selectedElement;
+
+    vector<MenuElement*> elements;
     
 private:
     const int WIDTH = 100;
@@ -71,9 +103,7 @@ private:
     
     ofTrueTypeFont font;
     string highlightedName;
-    string selectedName;
     ofPoint pos;
     bool bIsOpen;
     
-    vector<MenuElement*> elements;
 };

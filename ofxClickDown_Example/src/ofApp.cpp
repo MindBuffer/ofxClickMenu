@@ -48,8 +48,6 @@ void ofApp::setup(){
 
     ofAddListener(modulatorMenu.selectedElement, this, &ofApp::menuEvent);
 
-    cout << "modMenu.selectedElement address = " << &modulatorMenu.selectedElement << endl;
-
 }
 
 //--------------------------------------------------------------
@@ -60,7 +58,7 @@ void ofApp::menuEvent(string &s){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    modulatorMenu.update();
+
 }
 
 //--------------------------------------------------------------
