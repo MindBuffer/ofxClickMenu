@@ -150,6 +150,7 @@ string* ofxMenu::nameAtIndexTree(vector<int>& indexTree){
     if (elem->kind == BUTTON) {
         return &elem->name;
     } else {
+        cout << " IM A NULL STRING " << endl;
         return NULL;
     }
 }
