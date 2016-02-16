@@ -7,15 +7,15 @@ void ofApp::setup(){
     ofSetFrameRate(60);
     ofSetCircleResolution(40);
     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-
+    
     // Add the JEN and LFOS menus to the modulatorMenu.
     ofxMenu* jen = modulatorMenu.addMenu("JEN");
     ofxMenu* lfos = modulatorMenu.addMenu("LFOS");
-
+    
     // Add the Instruments and Playheads menus to the `jen` menu.
     ofxMenu* instruments = jen->addMenu("Instruments");
     ofxMenu* playheads = jen->addMenu("Playheads");
-
+    
     // Add the Instruments menu buttons.
     instruments->addButton("Kick Amp");
     instruments->addButton("Kick Pan");
@@ -26,6 +26,7 @@ void ofApp::setup(){
     instruments->addButton("Ghost Amp");
     instruments->addButton("Ghost Pan");
 
+    
     // Add the Playheads menu buttons.
     playheads->addButton("Song");
     playheads->addButton("Part");
@@ -36,6 +37,7 @@ void ofApp::setup(){
     playheads->addButton("Quaver");
     playheads->addButton("SemiQuaver");
 
+    
     // Add the LFOS menu buttons.
     lfos->addButton("LFO1");
     lfos->addButton("LFO2");
@@ -45,11 +47,20 @@ void ofApp::setup(){
     lfos->addButton("REORDER1");
     lfos->addButton("REORDER2");
     lfos->addButton("REORDER3");
+
+    ofAddListener(modulatorMenu.selectedElement, this, &ofApp::menuEvent);
+
+}
+
+//--------------------------------------------------------------
+void ofApp::menuEvent(string &s){
+    cout << "Woooop our [ " + s + " ] button was clicked :) " << endl;
+    cout << " --------------------------------------------- " << endl;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+
 }
 
 //--------------------------------------------------------------
@@ -58,13 +69,13 @@ void ofApp::draw(){
     
     ofSetHexColor(0xFFFFFF);
     ofDrawBitmapString("Click & open Menu Dialog.", 30,30);
-
+    
     modulatorMenu.draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    
 }
 
 //--------------------------------------------------------------
@@ -103,6 +114,6 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo){
     
 }

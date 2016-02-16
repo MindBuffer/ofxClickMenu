@@ -13,6 +13,8 @@ class ofApp : public ofBaseApp{
     void update();
     void draw();
     
+    void menuEvent(string &s);
+    
     void initDestinations();
     void initModulators();
     
